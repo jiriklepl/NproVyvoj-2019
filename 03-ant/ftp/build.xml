@@ -1,0 +1,62 @@
+<project name="FTPServer" default="build" basedir=".">
+    <property name="dist.name" value="ftpserver"/>
+
+    <property name="src.dir" value="./src"/>
+    <property name="build.dir" value="./build"/>
+    <property name="lib.dir" value="./lib"/>
+    <property name="dist.dir" value="./dist"/>
+
+    <tstamp/>
+
+    <path id="FTPServer.classpath">
+        <pathelement path="${java.class.path}"/>
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+
+    <target name="initdist">
+        <mkdir dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
+               includeantruntime="false">
+            <classpath refid="FTPServer.classpath"/>
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile, initdist">
+        <jar destfile="${dist.dir}/${dist.name}-${DSTAMP}.jar"
+             basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="org.apache.ftpserver.commandline.CommandLine"/>
+                <attribute name="Project" value="FTP"/>
+                <attribute name="BuildDate" value="${DSTAMP}"/>
+            </manifest>
+        </jar>
+
+        <zip basedir="${src.dir}"
+             destfile="${dist.dir}/sources.zip"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="run" depends="dist">
+        <available property="jar.exists"
+                   file="${dist.dir}/${dist.name}-${DSTAMP}.jar"/>
+        <fail unless="jar.exists">The archive is not up-to-date</fail>
+
+        <java jar="${dist.dir}/${dist.name}-${DSTAMP}.jar"
+              fork="true"
+              output="output.out"/>
+    </target>
+</project>

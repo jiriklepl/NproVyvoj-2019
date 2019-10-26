@@ -23,7 +23,7 @@
     </target>
 
     <target name="dist" depends="compile, initdist">
-        <jar destfile="./dist/cocome.jar" basedir="./build">
+        <jar destfile="${dist.dir}/cocome.jar" basedir="${build.dir}">
             <manifest>
                 <attribute name="Main-Class" value="GenSig"/>
             </manifest>

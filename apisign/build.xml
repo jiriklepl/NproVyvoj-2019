@@ -1,0 +1,28 @@
+<project name="APISign" default="dist" basedir=".">
+    <property name="src.dir" value="./src"/>
+    <property name="build.dir" value="./build"/>
+    <property name="dist.dir" value="./dist"/>
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+    <target name="initdist">
+        <mkdir dir="${build.dir}"/>
+    </target>
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}"/>
+    </target>
+    <target name="dist" depends="compile, initdist">
+        <jar destfile="./dist/sign.jar" basedir="./build">
+            <manifest>
+                <attribute name="Main-Class" value="GenSig"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+    <target name="cleanall">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+</project>

@@ -7,7 +7,7 @@ public class Employees {
         employees = new ArrayList<>();
     }
 
-    public class EmployeeData {
+    private class EmployeeData {
         public EmployeeData(String newName, int newSalary) {
             name = newName;
             salary = newSalary;

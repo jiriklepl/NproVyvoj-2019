@@ -1,5 +1,6 @@
 package com.github.jiriklepl.statistics;
 
+import java.io.Console;
 import java.util.*;
 
 public class Statistics {
@@ -7,7 +8,7 @@ public class Statistics {
         employees = newEmployees;
     }
 
-    int computeAverageSalary() {
+    public int computeAverageSalary() {
         int sum = 0;
         Set<Integer> ids = employees.getAll();
         for (int i : ids) {
@@ -17,7 +18,7 @@ public class Statistics {
         return sum / ids.size();
     }
 
-    int getMinSalary() {
+    public int getMinSalary() {
         Set<Integer> ids = employees.getAll();
         if (ids.isEmpty()) {
             return 0;
@@ -36,9 +37,22 @@ public class Statistics {
         return min;
     }
 
-    void printSalariesByName() {
-        // here we print salaries
+    public void printSalariesByName() {
+        Map<String, Integer> name_salary = new TreeMap<>();
+
+        Set<Integer> ids = employees.getAll();
+        
+        for (int i : ids) {
+            int salary = employees.getSalary(i);
+            String name = employees.getName(i);
+            
+            name_salary.put(name, salary);
+        }
+
+        for (String name : name_salary.keySet()) {
+            System.out.printf("%s: %d\n", name, name_salary.get(name));
+        }
     }
 
-    Employees employees;
+    private Employees employees;
 }

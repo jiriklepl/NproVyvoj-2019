@@ -24,14 +24,122 @@ Tasks
 
    Cover the following basic use cases:
      - adding new mapping with the key different from all present mappings
+
+    ```java
+    @Test
+    public void AddNewKeyValue() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        map.put("NewKey", 7);
+        assertTrue(map.size() == 8);
+    }
+    ```
+
      - adding new mapping with a key equal to some already present mapping
+
+    ```java
+    @Test
+    public void AddPresentKeyValue() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        map.put("FirstKey", 7);
+        assertTrue(map.size() == 7);
+        assertTrue(map.get("FirstKey") == 7);
+    }
+    ```
+
      - removing some element (mapping) already present in the map
+
+    ```java
+    @Test
+    public void RemovePresentKeyValue() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        map.remove("FirstKey");
+        assertTrue(map.size() == 6);
+    }
+    ```
+
      - attempt to remove some element (key) not present in the map
+
+    ```java
+    @Test
+    public void RemoveNewKeyValue() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        map.remove("FirstypoKey");
+        assertTrue(map.size() == 7);
+    }
+    ```
+
      - removing all elements from the map and checking for emptiness
+
+    ```java
+    @Test
+    public void RemoveAllAndEmpty() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        map.remove("FirstKey");
+        map.remove("SecondKey");
+        map.remove("ThirdKey");
+        map.remove("FourthKey");
+        map.remove("FifthKey");
+        map.remove("SixthKey");
+        map.remove("SeventhKey");
+        assertTrue(map.isEmpty());
+    }
+    ```
+
      - getting the value associated with a specific key
+
+    ```java
+    @Test
+    public void GetKey() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        Integer i = map.get("FirstKey");
+        assertTrue(i == 0);
+    }
+    ```
+
      - attempt to get a value for a key not present in the map
+
+    ```java
+    @Test
+    public void GetNotPresentKey() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        Integer i = map.get("FirstypoKey");
+        assertTrue(i == null);
+    }
+    ```
+
      - checking existence of a mapping for a given key
+
+    ```java
+    @Test
+    public void ContainsKeyBoth() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        assertTrue(map.containsKey("FirstKey"));
+        assertTrue(!map.containsKey("FirstypoKey"));
+    }
+    ```
+
      - iterating over sorted keys (from the lowest to the highest)
+
+    ```java
+    public void IterateOverSortedKeys() {
+        TreeMap<String, Integer> map = TestFixture.initTreeMap();
+        String old_key = null;
+        int i = 0;
+
+        for (String key : map.keySet()) {
+            assertTrue(key != null);
+            if (old_key != null) {
+                // checking ordering
+                assertTrue(old_key.compareTo(key) < 0);
+            }
+
+            old_key = key;
+            ++i;
+        }
+        // checking whether iterated through whole set of keys
+        assertTrue(i == map.size());
+    }
+    ```
 
    Always verify the current state of the map (content, size) and, if necessary, also the state of the associated iterator.
 
@@ -43,10 +151,171 @@ Tasks
 2. Build all tests for TreeMap and verify that they pass.
    Run tests from the command line, either by calling the appropriate runner class or use the "main" method in your test class (paste the command and test output here).
 
+```bash
+$ mvn test
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------< com.github.jiriklepl.treemaptest:treemaptest >------------
+[INFO] Building treemaptest 1.0
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ treemaptest ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /mnt/z/programming/NproVyvoj-2019/06-junit/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ treemaptest ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /mnt/z/programming/NproVyvoj-2019/06-junit/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ treemaptest ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /mnt/z/programming/NproVyvoj-2019/06-junit/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ treemaptest ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /mnt/z/programming/NproVyvoj-2019/06-junit/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ treemaptest ---
+[INFO] Surefire report directory: /mnt/z/programming/NproVyvoj-2019/06-junit/target/surefire-reports
+
+-------------------------------------------------------
+T E S T S
+-------------------------------------------------------
+Running com.github.jiriklepl.treemaptest.TestTreeMap
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.14 sec
+
+Results :
+
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.720 s
+[INFO] Finished at: 2019-11-28T22:48:20+01:00
+[INFO] ------------------------------------------------------------------------
+```
+
 3. Add another test for TreeMap that fails and prints a custom error message.
    For example, you can assert that the map has a key-value mapping which it does not really have.
    Run the tests and paste the output here. 
    In the output, mark the line of the output that contains the custom error message, and mark the line that identifies the place in the test code that has failed.
+
+```java
+@Test
+public void TestThatFails() {
+    TreeMap<String, Integer> map = TestFixture.initTreeMap();
+    assertThat("This should fail", map.isEmpty(), is(true));
+}
+```
+
+```bash
+$ mvn test
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------< com.github.jiriklepl.treemaptest:treemaptest >------------
+[INFO] Building treemaptest 1.0
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ treemaptest ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /mnt/z/programming/NproVyvoj-2019/06-junit/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ treemaptest ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /mnt/z/programming/NproVyvoj-2019/06-junit/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ treemaptest ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /mnt/z/programming/NproVyvoj-2019/06-junit/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ treemaptest ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /mnt/z/programming/NproVyvoj-2019/06-junit/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ treemaptest ---
+[INFO] Surefire report directory: /mnt/z/programming/NproVyvoj-2019/06-junit/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.github.jiriklepl.treemaptest.TestTreeMap
+Tests run: 10, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.171 sec <<< FAILURE!
+TestThatFails(com.github.jiriklepl.treemaptest.TestTreeMap)  Time elapsed: 0.028 sec  <<< FAILURE!
+java.lang.AssertionError: This should fail
+Expected: is <true>
+     but: was <false>
+        at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+        at org.junit.Assert.assertThat(Assert.java:956)
+        at com.github.jiriklepl.treemaptest.TestTreeMap.TestThatFails(TestTreeMap.java:99)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+        at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+        at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+        at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+        at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+        at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+        at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+        at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+        at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+        at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+        at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+        at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+        at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+        at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+        at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+        at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+        at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+        at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+        at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+        at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+        at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+        at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+
+
+Results :
+
+Failed tests:   TestThatFails(com.github.jiriklepl.treemaptest.TestTreeMap): This should fail(..)
+
+Tests run: 10, Failures: 1, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.745 s
+[INFO] Finished at: 2019-11-28T23:05:45+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.12.4:test (default-test) on project treemaptest: There are test failures.
+[ERROR] 
+[ERROR] Please refer to /mnt/z/programming/NproVyvoj-2019/06-junit/target/surefire-reports for the individual test results.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+```
+
+```bash
+(com.github.jiriklepl.treemaptest.TestTreeMap): This should fail(..)
+```
 
 [OPTIONAL] 4. Create a simple Ant script to build and run all your tests. 
    Feel free to copy-paste examples from the Ant manual or from the slides, and update them if needed.

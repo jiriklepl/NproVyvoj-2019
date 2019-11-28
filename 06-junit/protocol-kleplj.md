@@ -335,6 +335,57 @@ Tests run: 10, Failures: 1, Errors: 0, Skipped: 0
    It represents a simple database of employees.
    You do not have to create a real implementation of this interface (e.g., using an SQL database).
 
+```java
+package com.github.jiriklepl.statistics;
+
+import java.util.*;
+
+public class Employees {
+    public Employees() {
+        employees = new ArrayList<>();
+    }
+
+    private class EmployeeData {
+        public EmployeeData(String newName, int newSalary) {
+            name = newName;
+            salary = newSalary;
+        }
+
+        public String name;
+        public int salary;
+    }
+
+    public int add(String name, int salary) {
+        employees.add(new EmployeeData(name, salary));
+        return employees.size() - 1;
+    }
+
+    public Set<Integer> getAll() {
+        Set<Integer> ret = new HashSet<Integer>();
+
+        for (int i = 0; i < employees.size(); ++i) {
+            ret.add(i);
+        }
+
+        return ret;
+    }
+
+    public String getName(int id) {
+        return employees.get(id).name;
+    }
+
+    public int getSalary(int id) {
+        return employees.get(id).salary;
+    }
+
+    public void changeSalary(int id, int newSalary) {
+        employees.get(id).salary = newSalary;
+    }
+
+    private ArrayList<EmployeeData> employees;
+}
+```
+
 6. Define and implement the class Statistics that satisfies the following requirements. Use your favorite language (Java, C#, C/C++).
    Constructor should have an argument of type Employees that represents an instance to be used inside the class.
    List of required methods that you should implement:
@@ -342,10 +393,100 @@ Tests run: 10, Failures: 1, Errors: 0, Skipped: 0
      int getMinSalary();
      void printSalariesByName(); // prints the list of pairs <name, salary> that is sorted by employee names
 
+```java
+package com.github.jiriklepl.statistics;
+
+import java.io.Console;
+import java.util.*;
+
+public class Statistics {
+    public Statistics(Employees newEmployees) {
+        employees = newEmployees;
+    }
+
+    public int computeAverageSalary() {
+        int sum = 0;
+        Set<Integer> ids = employees.getAll();
+        for (int i : ids) {
+            sum += employees.getSalary(i);
+        }
+
+        return sum / ids.size();
+    }
+
+    public int getMinSalary() {
+        Set<Integer> ids = employees.getAll();
+        if (ids.isEmpty()) {
+            return 0;
+        }
+
+        Integer min = null;
+
+        for (int i : ids) {
+            int salary = employees.getSalary(i);
+
+            if (min == null || salary < min) {
+                min = salary;
+            }
+        }
+
+        return min;
+    }
+
+    public void printSalariesByName() {
+        Map<String, Integer> name_salary = new TreeMap<>();
+
+        Set<Integer> ids = employees.getAll();
+
+        for (int i : ids) {
+            int salary = employees.getSalary(i);
+            String name = employees.getName(i);
+
+            name_salary.put(name, salary);
+        }
+
+        for (String name : name_salary.keySet()) {
+            System.out.printf("%s: %d\n", name, name_salary.get(name));
+        }
+    }
+
+    private Employees employees;
+}
+```
+
 7. Write unit tests for methods of the Statistics class in any unit testing framework that is available for the selected language.
    In the unit tests, properly capture (model) the dependency on the instance of Employees given to the constructor.
    Define reasonable properties for the three methods and check whether they hold (using assertions in your unit tests).
    You should create unit tests that really check behavior of methods in the Statistics class (i.e., empty stub implementation of the Employee interface is not sufficient).
+
+```java
+package com.github.jiriklepl.statistics;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+/**
+ * Unit test for Statistics
+ */
+public class TestStatistics {
+    @Test
+    public void MinSalary() {
+        Employees employees = TestFixture.initEmployees();
+        Statistics statistics = new Statistics(employees);
+
+        assertTrue(statistics.getMinSalary() == 30000);
+    }
+
+    @Test
+    public void AverageSalaray() {
+        Employees employees = TestFixture.initEmployees();
+        Statistics statistics = new Statistics(employees);
+
+        assertTrue(statistics.computeAverageSalary() == 40000);
+    }
+}
+```
 
 8. Submit an archive containing your tests (source code) and the build scripts along with the protocol.
 
@@ -361,21 +502,25 @@ Na vetsinu otazek je mozna odpoved od 1 do 10, odpoved piste pod prislusnou otaz
 (1) Nakolik nove pro vas bylo tema cviceni?
     (1 - zcela nove, 10 - vse jsem jiz znal)
 
+1
 
 (2) Domnivate se, ze bylo tema cviceni uzitecne?
     (1 - neuzitecne ci prilis trivialni, 10 - velmi uzitecne)
 
+8
 
 (3) Jak hodnotite narocnost domaci ulohy?
     (1 - prilis trivialni, 5-6 - akorat, 10 - prilis narocne)
 
+8
 
 (4) Jak hodnotite svoje zkusenosti s nastrojem ve srovnani s domaci ulohou?
     (1 - vsechno uz znam a umim pouzivat, 10 - vsechno jsem si prakticky vyzkousel poprve)
 
+10
 
 (5) Kolik casu (v minutach) vam reseni zhruba zabralo?
 
+180
 
 (6) Prostor pro vlastni komentare ke cviceni a domaci uloze:
- 

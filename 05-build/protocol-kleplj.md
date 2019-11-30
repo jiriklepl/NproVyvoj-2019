@@ -36,6 +36,18 @@ Tasks
              Ensure that everything works properly.
              Follow the standard concepts and best practices associated with Autotools.
 
+```bash
+$ autoscan
+$ mv configure.scan configure.ac
+$ code configure.ac
+$ touch NEWS README AUTHORS ChangeLog 
+$ aclocal
+$ autoconf
+$ automake --add-missing
+$ git add .
+$ git commit -m "autodone"
+```
+
 2. Submit all the scripts and configuration files.
 
 

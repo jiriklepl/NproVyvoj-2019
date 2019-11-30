@@ -37,9 +37,10 @@ Tasks
              Follow the standard concepts and best practices associated with Autotools.
 
 ```bash
+# created Makefile.am and src/Makefile.am
 $ autoscan
 $ mv configure.scan configure.ac
-$ code configure.ac
+$ code configure.ac # adding AM_INIT_AUTOMAKE([1.0]), commenting out config.h
 $ touch NEWS README AUTHORS ChangeLog 
 $ aclocal
 $ autoconf
@@ -48,8 +49,17 @@ $ git add .
 $ git commit -m "autodone"
 ```
 
+```bash
+$ ./configure
+$ cd src; make all
+```
+
 2. Submit all the scripts and configuration files.
 
+
+```bash
+$ zip -r9 mydb.zip mydb protocol-kleplj.md
+```
 
 -------
 Anketa:

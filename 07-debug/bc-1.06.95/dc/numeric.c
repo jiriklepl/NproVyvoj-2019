@@ -86,7 +86,6 @@ dc_add DC_DECLARG((a, b, kscale, result))
 	int kscale ATTRIB((unused)) DC_DECLSEP
 	dc_num *result DC_DECLEND
 {
-	result = 0;
 	bc_init_num(CastNumPtr(result));
 	bc_add(CastNum(a), CastNum(b), CastNumPtr(result), 0);
 	return DC_SUCCESS;
@@ -103,7 +102,7 @@ dc_sub DC_DECLARG((a, b, kscale, result))
 	dc_num *result DC_DECLEND
 {
 	bc_init_num(CastNumPtr(result));
-	bc_sub(CastNum(b), CastNum(a), CastNumPtr(result), 0);
+	bc_sub(CastNum(a), CastNum(b), CastNumPtr(result), 0);
 	return DC_SUCCESS;
 }
 

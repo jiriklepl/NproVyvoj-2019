@@ -165,7 +165,11 @@ void REDUCER_dfsVoxelHashRecurse(Motion * motion, Vector2d * next_voxel, map_t g
 		VERCORMATH2D_add(next_voxel, horizontal, tmp);
 		VERCORMATH2D_subtract(tmp, vertical, tmp);
 		REDUCER_dfsVoxelHashRecurse(motion, tmp, graph_colors);
+
+		free(tmp2);
 	}
+
+	free(tmp);
 }
 
 void REDUCER_performVoxelHashing(Motion * motion, map_t graph_colors) {

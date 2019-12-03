@@ -119,7 +119,30 @@ int TRANSIENTDETECTOR_lookForCollisions(Motion * m, list_motions * l, collisions
 		truesize += TRANSIENTDETECTOR_determineCollisions(mlist->val,c);
 		mlist = mlist ->next;
 	}
-	free(l);
+
+	for (; l != 0; l = mlist) {
+		mlist = l->next;
+
+		for (
+			motions *val_ptr = l->val, *val_next;
+			val_ptr != 0;
+			val_ptr = val_next
+		) {
+			val_next = val_ptr->next;
+			free(val_ptr);
+		}
+
+		free(l);
+	}
+
+	for (int i = 0; i < currentFrame->planeCnt; ++i) {
+		free(m[i].aircraft);
+		free(m[i].pos_one);
+		free(m[i].pos_two);
+	}
+
+	free(m);
+
 	return truesize;
 
 }
@@ -176,8 +199,7 @@ void collectMotions(list_motions * ll) {
  */
 list_motions * TRANSIENTDETECTOR_reduceCollisionSet(Motion * m,list_motions * l) {
 	//map_t voxel_map;
-	map_t graph_colors;
-	graph_colors = hashmap_new();
+	map_t graph_colors = hashmap_new();
 //	int rr=0;
 //	for(;rr<currentFrame->planeCnt;rr++) {
 //		printf("motion: %s\n", MOTION_toString(&m[rr]));
@@ -196,6 +218,11 @@ list_motions * TRANSIENTDETECTOR_reduceCollisionSet(Motion * m,list_motions * l)
 //	for(;rr<currentFrame->planeCnt;rr++) {
 //		printf("motion: %s\n", MOTION_toString(&m[rr]));
 //	}
+
+
+	if (graph_colors != 0) {
+		hashmap_free(graph_colors);
+	}
 
 
 	l = (list_motions *)malloc(sizeof(list_motions));
@@ -233,10 +260,7 @@ Motion * TRANSIENTDETECTOR_createMotions() {
 
 		createdMotions[motionctr].aircraft = (Aircraft *) malloc(sizeof(Aircraft));
 		
-		char* cs_copy = (char *)malloc(strlen(cs)+1);
-		strcpy(cs_copy,cs);
-		
-		createdMotions[motionctr].aircraft->callsign = cs_copy;
+		createdMotions[motionctr].aircraft->callsign = cs;
 
 		createdMotions[motionctr].pos_one = (Vector3d *) malloc(sizeof(Vector3d));
 		createdMotions[motionctr].pos_two = (Vector3d *) malloc(sizeof(Vector3d));
@@ -273,8 +297,12 @@ Motion * TRANSIENTDETECTOR_createMotions() {
 				printf("createMotions: adding motion: %s\n", MOTION_toString(&createdMotions[motionctr]));
 			}
 			motionctr++;
+
+			free(save_old_position);
 		}
+
 		free(cs);
+		free(v);
 		free(new_pos);
 		free(old_pos);
 	

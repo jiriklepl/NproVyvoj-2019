@@ -32,7 +32,7 @@ void VOXELMAP_init() {
 
 	usedMotions = 0;
 	// allocate an array of MAX_ITEMS_PER_LIST integers
-	usedMotionsInList = (int *) malloc(MAX_ITEMS_PER_LIST);
+	usedMotionsInList = (int *) malloc(MAX_ITEMS_PER_LIST * sizeof(int));
 	// initialize all the allocated integers to zero
 	for (j=0;j<MAX_ITEMS_PER_LIST;j++)usedMotionsInList[j]=0;
 	voxel_map = hashmap_new();

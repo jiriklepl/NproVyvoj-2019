@@ -42,15 +42,13 @@ void freadswap(void* ptr, int size, int cnt, FILE* f) {
 		fprintf(stderr,"Error reading input file at %s:%d\n", __FILE__, __LINE__);
 		exit(1);
 	}
-	char * q = p;
 
 	for(i=0; i<cnt; i++) {
 		for(j=0; j<size; j++) {
-			*(char *)(ptr+i*size+j) = *(char *)(q+(i*size+size-j-1));
+			*(char *)(ptr+i*size+j) = *(char *)(p+(i*size+size-j-1));
 		}
 	}
 	free(p);
-	free(q);
 }
 
 void generate(char * args[]) {
@@ -76,7 +74,7 @@ void generate(char * args[]) {
 		exit(1);
 	}
 
-	frameCounter == 0;
+	frameCounter = 0;
 
 	FRAMEBUFFER_init();
 

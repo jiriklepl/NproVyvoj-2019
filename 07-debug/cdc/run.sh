@@ -1,0 +1,2 @@
+#! /bin/bash
+./cd mono10.bin MAX_FRAMES 400 PERIOD 50 DETECTOR_PRIORITY 9

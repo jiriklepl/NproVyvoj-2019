@@ -1,0 +1,61 @@
+Daisy is a simple file system written in Java.  It supports a subset
+of the POSIX API. The functions currently supported are creat, lookup,
+unlink, write, read, get_attr, and set_attr.  Although written in
+Java, Daisy adheres to C coding conventions.
+
+The implementation of Daisy consists of several layers.  At the lowest
+level is the class Petal which implements a virtual disk using a
+RandomAccessFile.  Petal presents the abstraction of finite sequence
+of bytes.  The class DaisyDisk partitions the Petal virtual disk into
+a finite sequence of blocks and a finite sequence of inodes.  Each
+file or directory in the file system is associated with a unique inode
+for keeping management data and a unique block for keeping the actual
+data.  Each inode contains a bit indicating whether it is currently in
+use, the size in number of bytes of the file it is being used for, and
+the index of the block containing the file data.  Each block is a
+sequence of bytes.  The class Daisy implements the file abstraction.
+The class DaisyDir implements the directory abstraction.
+
+The synchronization in Daisy is based on mutual-exclusion locks.  The
+class LockManager provides an unbounded supply of locks.  Each inode
+and each block is protected by a distinct lock.  There is an
+additional lock for each inode.  This lock is used to protect the
+contents of the directory whose management data is stored in the
+inode.  The class DaisyLock implements the abstraction of these three
+lock sequences.
+
+We now describe informally the semantics of the operations supported
+by Daisy.
+
+int creat(FileHandle dir, byte[] filename, FileHandle fh) 
+This operation creates a file with the name "filename" in the
+directory with file handle "dir".  The contents of the file handle
+"fh" are updated to that of the created file and the status of the
+operation is returned.
+
+int lookup(FileHandle dir, byte[] filename, FileHandle fh) 
+This operation looks up the file named "filename" in the directory
+with file handle "dir".  The file handle "fh" is updated to the file,
+if it is found.  The status of the operation is returned.
+
+int unlink(FileHandle dir, byte[] filename)
+This operation deletes the file named "filename" from the directory
+with file handle "dir".  The status of the operation is returned.
+
+int write(FileHandle file, int offset, int size, byte b[])
+This operation writes "size" bytes from the byte array "b" into the
+file with file handle "file" at "offset".  The status of the operation
+is returned.
+
+int read(FileHandle file, int offset, int size, byte b[]) 
+This operation reads "size" bytes into the byte array "b" from the
+file with file handle "file" at "offset".  The status of the operation
+is returned.
+
+int get_attr(FileHandle file, Attribute a)
+This operates gets the attributes of the file with file handle "file"
+into "a".  The status of the operation is returned.
+
+int set_attr(FileHandle file, Attribute a)
+This operates sets the attributes of the file with file handle "file"
+from "a".  The status of the operation is returned.

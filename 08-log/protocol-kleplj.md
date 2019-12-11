@@ -1,21 +1,23 @@
-Jmeno Prijmeni
-emailova@adresa
+Jiří Klepl
+jiriklepl@seznam.cz
 
 Deadline: 19.12.2019 / 13.12.2019
 
 Requirements:
+
 - You do not have to procotol absolutely everything, such as 'cd' commands,
   'rm -rf' when the task tells you to do a 'rm -rf', 'vim file', etc.
 - Include output of commands only when explicitly requested.
 - You can write answers in Czech.
 
 Useful links and help:
+
   http://logging.apache.org/log4j/2.x/
   http://www.gnu.org/software/libc/manual/html_node/Syslog.html
   man pages of respective tools
 
-
 -----
+
 Tasks
 -----
 
@@ -72,13 +74,13 @@ Tasks
 6. Submit an archive containing the protocol, modified sources (complete, not just
    a diff with your changes), all necessary libraries, and configuration files.
 
-
 -------
+
 Anketa:
 -------
 
 Anketa slouzi pro zhodnoceni temat cviceni a domacich uloh.
-Vyplneni je dobrovolne, nicmene vhodne k budoucimu ladeni obsahu a narocnosti cviceni. 
+Vyplneni je dobrovolne, nicmene vhodne k budoucimu ladeni obsahu a narocnosti cviceni.
 Na vetsinu otazek je mozna odpoved od 1 do 10, odpoved piste pod prislusnou otazku. 
 
 (1) Nakolik nove pro vas bylo tema cviceni?

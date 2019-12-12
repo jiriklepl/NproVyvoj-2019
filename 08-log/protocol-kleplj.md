@@ -24,15 +24,11 @@ Tasks
 0. Tasks 1 and 2 have two alternatives - Java and C#/.NET.
    You should pick just one based on your favorite platform and programming language.
 
-1. Java. The directory "daisyfs" contains a very simple concurrent file system written in Java.
+1. Java: The directory "daisyfs" contains a very simple concurrent file system written in Java.
         A short description and the list of relevant operations (API) is in the file "daisy.txt".
         The main class is "DaisyTest". It creates two threads which perform various operations.
-  
-    C#. The directory "deos" contains a very simple model of an operating system written in C#.
-      The main class is "ChessTest". It starts the main loop of the operating system.
-      Note there is no solution (project file) because the one distributed with the package was broken, so I deleted it.
 
-2. Java. Implement logging into the "daisyfs" program. Use the Log4j library (version 2).
+2. Java: Implement logging into the "daisyfs" program. Use the Log4j library (version 2).
         Configure the Log4j library such that log messages are saved into the file "events.log".
         Log the following actions:
           - creating a new file or directory
@@ -44,18 +40,6 @@ Tasks
           - number of the current thread
           - result (success, error status)
         Report errors also to console. Use filters on messages.
-
-    C#. Implement logging into the "deos" program. Use any framework available for C#/.NET (e.g., log4net or NLog).
-      Configure the given framework such that log messages are saved into the file "events.log".
-      Log the following events:
-        - creating a new thread
-        - start of some thread
-        - termination of some thread
-      For each event, record this information:
-        - thread name
-        - current time
-        - result (success, error status)
-      Report errors also to console. Use filters on messages.
 
 3. The directory "sockets" contains sources for a simple network client and server,
    and the script "build.sh" that can be used to compile everything.

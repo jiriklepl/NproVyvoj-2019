@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} %tid %-5level %c{36} %t - %m%n"/>
+        </Console>
+        <File name="logfile" fileName="test.log">
+            <PatternLayout pattern="%d{HH:mm:ss} %-5level %c{36} %t - %m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="cz.cuni.mff" level="info">
+            <AppenderRef ref="console"/>
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="logfile"/>
+        </Root>
+    </Loggers>
+</Configuration>

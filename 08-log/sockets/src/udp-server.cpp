@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <syslog.h>
+#include <stdarg.h>
+
 #include "server.h"
 
 #define MAX_MSG 100
@@ -60,6 +63,7 @@ int udp_server()
   cout << "Waiting for request on port " << listenPort << "\n";
 
   while (1) {
+    openlog("sockets-server", LOG_CONS | LOG_PID, LOG_USER);
 
     clientAddressLength = sizeof(clientAddress);
 
@@ -70,6 +74,13 @@ int udp_server()
                  (struct sockaddr *) &clientAddress,
                  &clientAddressLength) < 0) {
       cerr << "  I/O Problem";
+
+      syslog(
+        LOG_ERR,
+        "Failed to connect to %s:%u",
+        inet_ntoa(clientAddress.sin_addr),
+        ntohs(clientAddress.sin_port));
+
       exit(1);
     }
 
@@ -79,12 +90,24 @@ int udp_server()
     // Show the client's port number.
     cout << ":" << ntohs(clientAddress.sin_port) << "\n";
 
+    syslog(
+      LOG_NOTICE,
+      "Connected to %s:%u",
+      inet_ntoa(clientAddress.sin_addr),
+      ntohs(clientAddress.sin_port));
+
+    syslog(
+      LOG_NOTICE,
+      "Received line of length %d",
+      strlen(line));
+
     // Show the line
     cout << "  Received: " << line << "\n";
 
     // Convert line to upper case.
     for (i = 0; line[i] != '\0'; i++)
       line[i] = toupper(line[i]);
+
 
     // Send converted line back to client.
     if (sendto(listenSocket, line, strlen(line) + 1, 0,
@@ -93,6 +116,7 @@ int udp_server()
       cerr << "Error: cannot send modified data";
 
     memset(line, 0x0, LINE_ARRAY_SIZE);  // set line to all zeroes
+    closelog();
   }
   return (0);
 }

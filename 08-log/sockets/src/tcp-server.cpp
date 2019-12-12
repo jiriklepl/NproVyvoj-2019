@@ -4,8 +4,12 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <iostream>
+
 #include <stdlib.h>
 #include <string.h>
+
+#include <syslog.h>
+#include <stdarg.h>
 
 #include "server.h"
 
@@ -57,6 +61,8 @@ int tcp_server()
   listen(listenSocket, 5);
   
   while (1) {
+    openlog("sockets-server", LOG_CONS | LOG_PID, LOG_USER);
+
     cout << "Waiting for TCP connection on port " << listenPort << " ...\n";
 
     // Accept a connection with a client that is requesting one.  The
@@ -72,6 +78,13 @@ int tcp_server()
                            &clientAddressLength);
     if (connectSocket < 0) {
       cerr << "cannot accept connection ";
+
+      syslog(
+        LOG_ERR,
+        "Failed to connect to %s:%u",
+        inet_ntoa(clientAddress.sin_addr),
+        ntohs(clientAddress.sin_port));
+
       exit(1);
     }
     
@@ -86,6 +99,12 @@ int tcp_server()
     // for example, is Least Significant Byte first).
     cout << ":" << ntohs(clientAddress.sin_port) << "\n";
 
+    syslog(
+      LOG_NOTICE,
+      "Connected to %s:%u",
+      inet_ntoa(clientAddress.sin_addr),
+      ntohs(clientAddress.sin_port));
+
     // Read lines from socket, using recv(), storing them in the line
     // array.  If no messages are currently available, recv() blocks
     // until one arrives.
@@ -94,6 +113,12 @@ int tcp_server()
     memset(line, 0x0, LINE_ARRAY_SIZE);
     while (recv(connectSocket, line, MAX_MSG, 0) > 0) {
       cout << "  --  " << line << "\n";
+
+
+      syslog(
+        LOG_NOTICE,
+        "Received line of length %d",
+        strlen(line));
 
       // Convert line to upper case.
       for (i = 0; line[i] != '\0'; i++)
@@ -105,6 +130,8 @@ int tcp_server()
 
       memset(line, 0x0, LINE_ARRAY_SIZE);  // set line to all zeroes
     }
+
+    closelog();
   }
   return (0);
 }

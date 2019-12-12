@@ -8,17 +8,20 @@ INCLUDE  := include
 
 COMMON_FILES = $(patsubst %.cpp,%.o,$(wildcard $(SRC)/tcp-*) $(wildcard $(SRC)/udp-*))
 
-.PHONY: all clean server client
+.PHONY: all clean server client run
 
 all: server client
 
-server: $(BIN)/server 
+server: $(BIN)/server
 
 client: $(BIN)/client
 
 clean:
 	rm -f $(wildcard $(BIN)/*)
 	rm -f $(wildcard $(SRC)/*.o)
+
+run: server
+	echo "$(((RANDOM % 63500) + 1500))" | bin/server
 
 %.o: %.cpp $(INCLUDE)
 	$(CXX) -c $(CXX_FLAGS) -I$(INCLUDE) -o $@ $<
